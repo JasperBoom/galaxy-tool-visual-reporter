@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tool id="getInformation" name="Phyloseq Statistical Analysis:" version="0.1.0">
+    <description>
+        Use Phyloseq to a statistical analysis resulting in multiple plots.
+    </description>
+    <!-- Call the getInformation script, set input parameters according to user
+         choices. -->
+    <command interpreter="bash">
+        getInformation.sh -o ${fosOutput} -f ${fisInput.rbInput} -t ${rbTaxon}
+                          -a ${fosAbsoluteBar} -b ${fosRelativeBar}
+                          -r ${fosRichness} -e ${fosAbsoluteMap}
+                          -m ${fosRelativeMap}
+        #if $fisInput.rbInput == "otu_old"
+            -i $fisInput.fisOtuOld
+        #elif $fisInput.rbInput == "otu_new"
+            -i $fisInput.fisOtuNew
+        #elif $fisInput.rbInput == "lca"
+            -i $fisInput.fisLca
+        #end if
+    </command>
+    <inputs>
+    <!-- Catch the input file. -->
+        <conditional name="fisInput">
+            <param name="rbInput" type="select" label="OTU or LCA?"
+                   multiple="false">
+                <option value="otu_old">OTU file + old BLAST</option>
+                <option value="otu_new" selected="true">OTU file + new BLAST</option>
+                <option value="lca">OTU file + LCA</option>
+            </param>
+            <!-- Catch the single input file -->
+            <when value="otu_old">
+                <param name="fisOtuOld" type="data" format="tabular"
+                       label="OTU file + old BLAST."/>
+            </when>
+            <!-- Catch the single input file -->
+            <when value="otu_new">
+                <param name="fisOtuNew" type="data" format="tabular"
+                       label="OTU file + new BLAST."/>
+            </when>
+            <!-- Catch the single input file -->
+            <when value="lca">
+                <param name="fisLca" type="data" format="tabular"
+                       label="OTU file + LCA."/>
+            </when>
+        </conditional>
+        <param name="rbTaxon" type="select" 
+               label="The taxon level for graphic output" multiple="false">
+            <option value="Kingdom">Kingdom level</option>
+            <option value="Phylum">Phylum level</option>
+            <option value="Class">Class level</option>
+            <option value="Order">Order level</option>
+            <option value="Family">Family level</option>
+            <option value="Genus" selected="true">Genus level</option>
+            <option value="Species">Species level</option>
+        </param>
+    </inputs>
+    <outputs>
+        <!-- Catch the output file. -->
+        <data format="pdf" name="fosOutput" label="Phyloseq_Analysis_Total">
+        </data>
+        <data format="ps" name="fosAbsoluteBar" 
+              label="Phyloseq_Analysis_Absolute_Bar_Plot">
+        </data>
+        <data format="ps" name="fosRelativeBar" 
+              label="Phyloseq_Analysis_Relative_Bar_Plot">
+        </data>
+        <data format="ps" name="fosRichness" 
+              label="Phyloseq_Analysis_Richness_Plot">
+        </data>
+        <data format="ps" name="fosAbsoluteMap" 
+              label="Phyloseq_Analysis_Absolute_Heatmap">
+        </data>
+        <data format="ps" name="fosRelativeMap" 
+              label="Phyloseq_Analysis_Relative_Heatmap">
+        </data>
+    </outputs>
+    <tests>
+    </tests>
+    <help>
+        .. class:: infomark
+
+        The Statistical Analysis tool will utilize the Phyloseq R package to
+        create multiple plots based on a OTU table.
+
+        .. class:: infomark
+
+        These plots are:
+            - A bar plot: a plot to quickly and easily show informative
+              summary graphics of the differences in taxa abundance between
+              samples in an experiment.
+            - A richness plot: a number of alpha-diversity metrics (Observed,
+              Shannon and Simpson)
+            - A heatmap plot: a heat map is a false color image with a
+              dendrogram added to the top.
+
+        .. class:: infomark
+
+        All of these plots will be generated using both the absolute numbers in
+        a OTU table as well as relative numbers for a OTU table.
+
+        .. class:: warningmark
+
+        Sample names can not start with a "#".
+        All columns in a OTU table should have a header starting with "#".
+
+--------
+
+        Source(s):
+            - **McMurdie PJ, Holmes S**, Phyloseq: An R Package for Reproducible
+              Interactive Analysis and Graphics of Microbiome Census Data.
+              PLOS One. 2013; 8(4).
+              **doi: 10.1371/journal.pone.0061217**
+              https://joey711.github.io/phyloseq/
+    </help>
+</tool>
