@@ -14,7 +14,7 @@
 # - biocLite("optparse")
 
 # Galaxy prequisites:
-# - sudo ln -s /path/to/folder/galaxy-tool-phyloseq-statistical-report/getInformation.R
+# - sudo ln -s /path/to/folder/galaxy-tool-visual-reporter/getInformation.R
 #              /usr/local/bin/getInformation.R
 
 library("optparse")
